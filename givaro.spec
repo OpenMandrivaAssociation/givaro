@@ -3,6 +3,7 @@ Summary:	C++ library for arithmetic and algebraic computations
 Version:	3.2
 Release:	%mkrel 1
 License:	GPL
+Group:		Sciences/Mathematics
 Source0:	http://www-lmc.imag.fr/CASYS/LOGICIELS/givaro/Downloads/givaro-3.2.tar.gz
 URL:		http://www-lmc.imag.fr/CASYS/LOGICIELS/givaro
 
