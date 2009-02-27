@@ -27,7 +27,7 @@ LinBox linear algebra library and the Athapascan environment, which permits
 parallel programming.
 
 %package	devel
-Group:		Science/Mathematics
+Group:		Development/Other
 Summary:	LinBox development files
 
 %description	devel
