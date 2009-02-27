@@ -1,4 +1,4 @@
-Name:		givaro-devel
+Name:		givaro
 Summary:	C++ library for arithmetic and algebraic computations
 Version:	3.2
 Release:	%mkrel 1
@@ -26,6 +26,13 @@ It contains different program modules and is fully compatible with the
 LinBox linear algebra library and the Athapascan environment, which permits
 parallel programming.
 
+%package	devel
+Group:		Science/Mathematics
+Summary:	LinBox development files
+
+%description	devel
+This package contains the givaro development files.
+
 %prep
 %setup -q -n givaro-%{version}.13
 
@@ -39,7 +46,7 @@ parallel programming.
 %clean
 rm -rf %{buildroot}
 
-%files
+%files		devel
 %defattr(-,root,root)
 %{_bindir}/givaro-*
 %{_includedir}/givaro-config.h
