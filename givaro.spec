@@ -1,7 +1,11 @@
-Name:		givaro
+%define name	givaro
+%define libname	%mklibname %{name} 0
+%define devname	%mklibname %{name} -d 
+
+Name:		%{name}
 Summary:	C++ library for arithmetic and algebraic computations
 Version:	3.2
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	GPL
 Group:		Sciences/Mathematics
 Source0:	http://www-lmc.imag.fr/CASYS/LOGICIELS/givaro/Downloads/givaro-3.2.tar.gz
@@ -26,18 +30,27 @@ It contains different program modules and is fully compatible with the
 LinBox linear algebra library and the Athapascan environment, which permits
 parallel programming.
 
-%package	devel
-Group:		Development/Other
-Summary:	LinBox development files
+%package	-n %{libname}
+Group:		Syntem/Libraries
+Summary:	Givaro shared library
 
-%description	devel
+%description	-n %{libname}
+This package contains the givaro shared libraries.
+
+%package	-n %{devname}
+Group:		Development/C++
+Summary:	Givaro development files
+Obsoletes:	%{name}-devel < 3.3
+Provides:	%{name}-devel = %{version}-%{release}
+
+%description	-n %{devname}
 This package contains the givaro development files.
 
 %prep
 %setup -q -n givaro-%{version}.13
 
 %build
-%configure2_5x --with-gmp=%{_prefix}
+%configure2_5x --with-gmp=%{_prefix} --disable-static --enable-shared
 %make
 
 %install
@@ -46,7 +59,11 @@ This package contains the givaro development files.
 %clean
 rm -rf %{buildroot}
 
-%files		devel
+%files		-n %{libname}
+%defattr(-,root,root)
+%{_libdir}/libgivaro.so.*
+
+%files		-n %{devname}
 %defattr(-,root,root)
 %{_bindir}/givaro-*
 %{_includedir}/givaro-config.h
@@ -54,4 +71,5 @@ rm -rf %{buildroot}
 %{_includedir}/givaro/*
 %dir %{_includedir}/gmp++
 %{_includedir}/gmp++/*
-%{_libdir}/libgivaro.*
+%{_libdir}/libgivaro.la
+%{_libdir}/libgivaro.so
