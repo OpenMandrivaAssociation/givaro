@@ -31,7 +31,7 @@ LinBox linear algebra library and the Athapascan environment, which permits
 parallel programming.
 
 %package	-n %{libname}
-Group:		Syntem/Libraries
+Group:		System/Libraries
 Summary:	Givaro shared library
 
 %description	-n %{libname}
