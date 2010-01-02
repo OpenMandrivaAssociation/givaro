@@ -4,11 +4,11 @@
 
 Name:		%{name}
 Summary:	C++ library for arithmetic and algebraic computations
-Version:	3.2
-Release:	%mkrel 5
+Version:	3.3.1
+Release:	%mkrel 1
 License:	GPL
 Group:		Sciences/Mathematics
-Source0:	http://www-lmc.imag.fr/CASYS/LOGICIELS/givaro/Downloads/givaro-3.2.tar.gz
+Source0:	http://ljk.imag.fr/CASYS/LOGICIELS/givaro/Downloads/%{name}-%{version}.tar.gz
 URL:		http://www-lmc.imag.fr/CASYS/LOGICIELS/givaro
 
 BuildRequires:	libgmpxx-devel
@@ -48,7 +48,7 @@ Requires:	libgmp-devel
 This package contains the givaro development files.
 
 %prep
-%setup -q -n givaro-%{version}.13
+%setup -q -n givaro-%{version}
 
 %build
 %configure2_5x --with-gmp=%{_prefix} --disable-static --enable-shared
