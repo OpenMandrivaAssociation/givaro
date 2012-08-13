@@ -4,7 +4,7 @@
 
 Name:		%{name}
 Version:	3.7.0
-Release:	1
+Release:	2
 Summary:	C++ library for arithmetic and algebraic computations
 Group:		Sciences/Mathematics
 
