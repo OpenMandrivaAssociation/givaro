@@ -1,73 +1,113 @@
-%define name	givaro
-%define libname	%mklibname %{name} 0
-%define devname	%mklibname %{name} -d 
+%define name		givaro
+%define libgivaro	%mklibname %{name} 0
+%define libgivaro_devel	%mklibname %{name} -d 
 
 Name:		%{name}
+Version:	3.7.0
+Release:	1
 Summary:	C++ library for arithmetic and algebraic computations
-Version:	3.3.2
-Release:	%mkrel 4
-License:	GPL
 Group:		Sciences/Mathematics
-Source0:	http://ljk.imag.fr/CASYS/LOGICIELS/givaro/Downloads/%{name}-%{version}.tar.gz
-URL:		http://www-lmc.imag.fr/CASYS/LOGICIELS/givaro
+
+License:	CeCILL-B
+URL:		http://ljk.imag.fr/CASYS/LOGICIELS/givaro/
+Source0:	https://forge.imag.fr/frs/download.php/207/%{name}-%{version}.tar.gz
+Patch0:		givaro-config-script.patch
+Patch1:		givaro-underlink.patch
+
+BuildRequires:	doxygen
 BuildRequires:	gmpxx-devel
+BuildRequires:	texlive
+
 
 %description
-In the joint CNRS-INRIA / INPG-UJF project APACHE, Givaro is a C++ library
-for arithmetic and algebraic computations.
+Givaro is a C++ library for arithmetic and algebraic computations.
 Its main features are implementations of the basic arithmetic of many
 mathematical entities: Primes fields, Extensions Fields, Finite Fields,
-Finite Rings, Polynomials, Algebraic numbers, Arbitrary precision integers
-and rationals (C++ wrappers over gmp) It also provides data-structures and
-templated classes for the manipulation of basic algebraic objects, such as
-vectors, matrices (dense, sparse, structured), univariate polynomials (and
-therefore recursive multivariate).
-It contains different program modules and is fully compatible with the
-LinBox linear algebra library and the Athapascan environment, which permits
-parallel programming.
+Finite Rings, Polynomials, Algebraic numbers, Arbitrary precision
+integers and rationals (C++ wrappers over gmp) It also provides
+data-structures and templated classes for the manipulation of basic
+algebraic objects, such as vectors, matrices (dense, sparse, structured),
+univariate polynomials (and therefore recursive multivariate).
 
-%package	-n %{libname}
+
+%package	-n %{libgivaro}
 Group:		System/Libraries
 Summary:	Givaro shared library
 
-%description	-n %{libname}
+
+%description	-n %{libgivaro}
 This package contains the givaro shared libraries.
 
-%package	-n %{devname}
+
+%package	-n %{libgivaro_devel}
 Group:		Development/C++
 Summary:	Givaro development files
-Obsoletes:	%{name}-devel < 3.3
 Provides:	%{name}-devel = %{version}-%{release}
-Requires:	%{libname} = %{version}-%{release}
-Requires:	gmp-devel
+Provides:	lib-%{name}-devel = %{version}-%{release}
+Requires:	%{libgivaro} = %{version}-%{release}
+Requires:	gmpxx-devel
 
-%description	-n %{devname}
+
+%description	-n %{libgivaro_devel}
 This package contains the givaro development files.
+
 
 %prep
 %setup -q -n givaro-%{version}
+%patch0 -p0
+%patch1 -p1
+
+# Fix file encodings
+for i in Licence_CeCILL-B_V1-fr.txt Licence_CeCILL-B_V1-en.txt;
+do
+	iconv -f  iso8859-1 -t utf-8 $i > $i.new && \
+	touch -r $i $i.new && \
+	mv $i.new $i
+done
+
+# Remove unnecessary executable bits
+find examples -name Makefile.am -perm /0111 | xargs chmod a-x
 
 %build
-%configure2_5x --with-gmp=%{_prefix} --disable-static --enable-shared
-%make
+%configure2_5x --enable-shared --disable-static --enable-doc \
+  --docdir=%{_docdir}/%{name}-devel-%{version}
+
+# Fix an unused direct library dependency
+sed -i 's/-lm -lgcc_s/-lgcc_s/' libtool
+
+make %{?_smp_mflags}
+
+# We don't want these files with the doxygen-generated files
+rm -f docs/givaro-html/{AUTHORS,COPYING,INSTALL}
+
 
 %install
-%makeinstall_std
-rm %{buildroot}%{_libdir}/libgivaro.la
+# Documentation installation is hopelessly broken
+sed -i 's/^SUBDIRS =.*/SUBDIRS = src macros tests/' Makefile
 
-%clean
-rm -rf %{buildroot}
+make install DESTDIR=$RPM_BUILD_ROOT
+rm -f $RPM_BUILD_ROOT%{_libdir}/lib%{name}.la
 
-%files		-n %{libname}
-%defattr(-,root,root)
-%{_libdir}/libgivaro.so.*
+#givaro-makefile is installed incorrectly in usr/bin
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}
+mv $RPM_BUILD_ROOT/%{_bindir}/givaro-makefile $RPM_BUILD_ROOT%{_datadir}/%{name}
+chmod 644  $RPM_BUILD_ROOT%{_datadir}/%{name}/givaro-makefile
+sed -i '\%#! /bin/sh%D' $RPM_BUILD_ROOT%{_datadir}/%{name}/givaro-makefile
 
-%files		-n %{devname}
-%defattr(-,root,root)
-%{_bindir}/givaro-*
-%{_includedir}/givaro-config.h
-%dir %{_includedir}/givaro
-%{_includedir}/givaro/*
-%dir %{_includedir}/gmp++
-%{_includedir}/gmp++/*
-%{_libdir}/libgivaro.so
+
+%check
+make check
+
+%files		-n %{libgivaro}
+%doc COPYRIGHT Licence_CeCILL-B_V1-en.txt Licence_CeCILL-B_V1-fr.txt
+%{_libdir}/lib%{name}.so.*
+
+
+%files		-n %{libgivaro_devel}
+%doc docs/givaro-html docs/givaro-dev-html examples
+%{_bindir}/%{name}-config
+%{_includedir}/%{name}/
+%{_includedir}/gmp++/
+%{_datadir}/%{name}/
+%{_includedir}/%{name}-config.h
+%{_libdir}/lib%{name}.so
