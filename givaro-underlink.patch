@@ -1,0 +1,11 @@
+--- givaro-3.7.0/src/Makefile.in.orig	2012-08-13 13:18:27.062830777 -0300
++++ givaro-3.7.0/src/Makefile.in	2012-08-13 13:19:02.146830004 -0300
+@@ -309,7 +309,7 @@ SUBDIRS = kernel library
+ lib_LTLIBRARIES = libgivaro.la
+ libgivaro_la_SOURCES = dummy.C
+ libgivaro_la_LIBADD = \
+-	kernel/gmp++/libgmppp.la kernel/bstruct/libgivbstruct.la kernel/integer/libgivinteger.la kernel/memory/libgivmemory.la kernel/rational/libgivrational.la kernel/system/libgivsystem.la kernel/zpz/libgivzpz.la library/tools/libgivtools.la library/poly1/libgivpoly1.la
++	kernel/gmp++/libgmppp.la kernel/bstruct/libgivbstruct.la kernel/integer/libgivinteger.la kernel/memory/libgivmemory.la kernel/rational/libgivrational.la kernel/system/libgivsystem.la kernel/zpz/libgivzpz.la library/tools/libgivtools.la library/poly1/libgivpoly1.la -lm
+ 
+ 
+ # soname of libgivaro

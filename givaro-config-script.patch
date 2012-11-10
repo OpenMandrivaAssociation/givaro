@@ -1,0 +1,23 @@
+--- givaro-config.in	2011-10-08 08:53:58.000000000 -0600
++++ givaro-config.in.new	2011-11-01 12:44:08.774980325 -0600
+@@ -77,11 +77,11 @@
+ 	;;
+ 
+     --cflags)
+-       	echo -I${includedir} @GMP_CFLAGS@
++       	echo -n " -I${includedir} @GMP_CFLAGS@"
+ 	;;
+ 
+     --libs)
+-       	echo -L${libdir} -lgivaro @GMP_LIBS@ 
++       	echo -n " -L${libdir} -lgivaro @GMP_LIBS@"
+        	;;
+ 
+     *)
+@@ -91,5 +91,6 @@
+     esac
+     shift
+ done
++echo
+ 
+ exit 0
