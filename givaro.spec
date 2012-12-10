@@ -111,3 +111,60 @@ make check
 %{_datadir}/%{name}/
 %{_includedir}/%{name}-config.h
 %{_libdir}/lib%{name}.so
+
+
+%changelog
+* Mon Aug 13 2012 Paulo Andrade <pcpa@mandriva.com.br> 3.7.0-2
++ Revision: 814655
+- Bump release and rebuild.
+- Update to release matching http://pkgs.fedoraproject.org/cgit/givaro.git
+
+* Wed Aug 08 2012 Paulo Andrade <pcpa@mandriva.com.br> 3.3.2-4
++ Revision: 812816
+- Remove now bad libgmp-devel requires (#65714)
+
+* Wed Dec 07 2011 Paulo Andrade <pcpa@mandriva.com.br> 3.3.2-3
++ Revision: 738705
+- Rebuild for .la file removal.
+
+* Mon Mar 14 2011 Paulo Andrade <pcpa@mandriva.com.br> 3.3.2-2
++ Revision: 644653
+- Rebuild to ensure it is linked with proper libraries
+
+* Wed Jul 14 2010 Paulo Andrade <pcpa@mandriva.com.br> 3.3.2-1mdv2011.0
++ Revision: 552983
+- Update to version 3.3.2.
+
+* Wed Feb 10 2010 Funda Wang <fwang@mandriva.org> 3.3.1-2mdv2010.1
++ Revision: 503613
+- rebuild for new gmp
+
+* Sat Jan 02 2010 Frederik Himpe <fhimpe@mandriva.org> 3.3.1-1mdv2010.1
++ Revision: 485096
+- Update to new version 3.3.1
+
+* Fri May 29 2009 Paulo Andrade <pcpa@mandriva.com.br> 3.2-5mdv2010.0
++ Revision: 381161
+- Add libgmpxx-devel as build requires, what should remove the requirement
+  of a "hack" patch in the linbox package (that ended being the reason of
+  a major problem in the sagemath package, as reported by a cooker user).
+
+* Fri May 22 2009 Paulo Andrade <pcpa@mandriva.com.br> 3.2-4mdv2010.0
++ Revision: 378828
++ rebuild (emptylog)
+
+* Fri Apr 03 2009 Paulo Andrade <pcpa@mandriva.com.br> 3.2-3mdv2009.1
++ Revision: 363945
++ rebuild (emptylog)
+
+* Fri Apr 03 2009 Paulo Andrade <pcpa@mandriva.com.br> 3.2-2mdv2009.1
++ Revision: 363922
+- Build shared libraries, and properly name packages to libgivaro and
+  libgivaro-devel.
+
+* Fri Feb 27 2009 Paulo Andrade <pcpa@mandriva.com.br> 3.2-1mdv2009.1
++ Revision: 345802
+- Initial import of givaro, version 3.2 (patchlevel 13).
+  Givaro is a C++ library for arithmetic and algebraic computations.
+- givaro
+
