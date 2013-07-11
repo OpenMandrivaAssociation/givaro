@@ -3,14 +3,15 @@
 %define libgivaro_devel	%mklibname %{name} -d 
 
 Name:		%{name}
-Version:	3.7.0
-Release:	2
+Version:	3.7.2
+Release:	1
 Summary:	C++ library for arithmetic and algebraic computations
 Group:		Sciences/Mathematics
 
 License:	CeCILL-B
 URL:		http://ljk.imag.fr/CASYS/LOGICIELS/givaro/
-Source0:	https://forge.imag.fr/frs/download.php/207/%{name}-%{version}.tar.gz
+Source0:	https://forge.imag.fr/frs/download.php/370/%{name}-%{version}.tar.gz
+# Avoid a spurious newline when configuring with both --cflags and --libs
 Patch0:		givaro-config-script.patch
 Patch1:		givaro-underlink.patch
 
@@ -58,7 +59,7 @@ This package contains the givaro development files.
 %patch1 -p1
 
 # Fix file encodings
-for i in Licence_CeCILL-B_V1-fr.txt Licence_CeCILL-B_V1-en.txt;
+for i in Licence_CeCILL-B_V1-fr.txt Licence_CeCILL-B_V1-en.txt COPYING AUTHORS;
 do
 	iconv -f  iso8859-1 -t utf-8 $i > $i.new && \
 	touch -r $i $i.new && \
@@ -70,10 +71,15 @@ find examples -name Makefile.am -perm /0111 | xargs chmod a-x
 
 %build
 %configure2_5x --enable-shared --disable-static --enable-doc \
-  --docdir=%{_docdir}/%{name}-devel-%{version}
+  --docdir=%{_docdir}/%{name}-devel-%{version} CPPFLAGS="-D__int64=__int64_t"
 
-# Fix an unused direct library dependency
-sed -i 's/-lm -lgcc_s/-lgcc_s/' libtool
+# Get rid of undesirable hardcoded rpaths, and workaround libtool reordering
+# -Wl,--as-needed after all the libraries.
+sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
+    -e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
+    -e 's|^LTCC="gcc"|LTCC="gcc -Wl,--as-needed"|' \
+    -e 's|^CC="\(g..\)"|CC="\1 -Wl,--as-needed"|' \
+    -i libtool
 
 make %{?_smp_mflags}
 
@@ -99,7 +105,8 @@ sed -i '\%#! /bin/sh%D' $RPM_BUILD_ROOT%{_datadir}/%{name}/givaro-makefile
 make check
 
 %files		-n %{libgivaro}
-%doc COPYRIGHT Licence_CeCILL-B_V1-en.txt Licence_CeCILL-B_V1-fr.txt
+%doc AUTHORS COPYRIGHT COPYING
+%doc Licence_CeCILL-B_V1-en.txt Licence_CeCILL-B_V1-fr.txt
 %{_libdir}/lib%{name}.so.*
 
 
@@ -111,60 +118,3 @@ make check
 %{_datadir}/%{name}/
 %{_includedir}/%{name}-config.h
 %{_libdir}/lib%{name}.so
-
-
-%changelog
-* Mon Aug 13 2012 Paulo Andrade <pcpa@mandriva.com.br> 3.7.0-2
-+ Revision: 814655
-- Bump release and rebuild.
-- Update to release matching http://pkgs.fedoraproject.org/cgit/givaro.git
-
-* Wed Aug 08 2012 Paulo Andrade <pcpa@mandriva.com.br> 3.3.2-4
-+ Revision: 812816
-- Remove now bad libgmp-devel requires (#65714)
-
-* Wed Dec 07 2011 Paulo Andrade <pcpa@mandriva.com.br> 3.3.2-3
-+ Revision: 738705
-- Rebuild for .la file removal.
-
-* Mon Mar 14 2011 Paulo Andrade <pcpa@mandriva.com.br> 3.3.2-2
-+ Revision: 644653
-- Rebuild to ensure it is linked with proper libraries
-
-* Wed Jul 14 2010 Paulo Andrade <pcpa@mandriva.com.br> 3.3.2-1mdv2011.0
-+ Revision: 552983
-- Update to version 3.3.2.
-
-* Wed Feb 10 2010 Funda Wang <fwang@mandriva.org> 3.3.1-2mdv2010.1
-+ Revision: 503613
-- rebuild for new gmp
-
-* Sat Jan 02 2010 Frederik Himpe <fhimpe@mandriva.org> 3.3.1-1mdv2010.1
-+ Revision: 485096
-- Update to new version 3.3.1
-
-* Fri May 29 2009 Paulo Andrade <pcpa@mandriva.com.br> 3.2-5mdv2010.0
-+ Revision: 381161
-- Add libgmpxx-devel as build requires, what should remove the requirement
-  of a "hack" patch in the linbox package (that ended being the reason of
-  a major problem in the sagemath package, as reported by a cooker user).
-
-* Fri May 22 2009 Paulo Andrade <pcpa@mandriva.com.br> 3.2-4mdv2010.0
-+ Revision: 378828
-+ rebuild (emptylog)
-
-* Fri Apr 03 2009 Paulo Andrade <pcpa@mandriva.com.br> 3.2-3mdv2009.1
-+ Revision: 363945
-+ rebuild (emptylog)
-
-* Fri Apr 03 2009 Paulo Andrade <pcpa@mandriva.com.br> 3.2-2mdv2009.1
-+ Revision: 363922
-- Build shared libraries, and properly name packages to libgivaro and
-  libgivaro-devel.
-
-* Fri Feb 27 2009 Paulo Andrade <pcpa@mandriva.com.br> 3.2-1mdv2009.1
-+ Revision: 345802
-- Initial import of givaro, version 3.2 (patchlevel 13).
-  Givaro is a C++ library for arithmetic and algebraic computations.
-- givaro
-
