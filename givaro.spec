@@ -102,7 +102,7 @@ sed -i '\%#! /bin/sh%D' $RPM_BUILD_ROOT%{_datadir}/%{name}/givaro-makefile
 
 
 %check
-make check
+LD_LIBRARY_PATH=$PWD/src/.libs: make check
 
 %files		-n %{libgivaro}
 %doc AUTHORS COPYRIGHT COPYING
