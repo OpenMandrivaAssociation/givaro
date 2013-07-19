@@ -4,10 +4,8 @@
 
 Name:		%{name}
 Version:	3.7.2
-Release:	1
+Release:	2
 Summary:	C++ library for arithmetic and algebraic computations
-Group:		Sciences/Mathematics
-
 License:	CeCILL-B
 URL:		http://ljk.imag.fr/CASYS/LOGICIELS/givaro/
 Source0:	https://forge.imag.fr/frs/download.php/370/%{name}-%{version}.tar.gz
@@ -32,7 +30,6 @@ univariate polynomials (and therefore recursive multivariate).
 
 
 %package	-n %{libgivaro}
-Group:		System/Libraries
 Summary:	Givaro shared library
 
 
@@ -41,7 +38,6 @@ This package contains the givaro shared libraries.
 
 
 %package	-n %{libgivaro_devel}
-Group:		Development/C++
 Summary:	Givaro development files
 Provides:	%{name}-devel = %{version}-%{release}
 Provides:	lib-%{name}-devel = %{version}-%{release}
