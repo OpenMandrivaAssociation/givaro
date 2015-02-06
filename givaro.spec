@@ -4,7 +4,7 @@
 
 Name:		%{name}
 Version:	3.7.2
-Release:	2
+Release:	3
 Summary:	C++ library for arithmetic and algebraic computations
 License:	CeCILL-B
 URL:		http://ljk.imag.fr/CASYS/LOGICIELS/givaro/
