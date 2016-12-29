@@ -1,16 +1,14 @@
-%define name		givaro
-%define libgivaro	%mklibname %{name} 0
+%define major	9
+%define libgivaro	%mklibname %{name} %{major}
 %define libgivaro_devel	%mklibname %{name} -d 
 
-Name:		%{name}
-Version:	3.7.2
-Release:	3
+Name:		givaro
+Version:	4.0.2
+Release:	1
 Summary:	C++ library for arithmetic and algebraic computations
 License:	CeCILL-B
-URL:		http://ljk.imag.fr/CASYS/LOGICIELS/givaro/
-Source0:	https://forge.imag.fr/frs/download.php/370/%{name}-%{version}.tar.gz
-# Avoid a spurious newline when configuring with both --cflags and --libs
-Patch0:		givaro-config-script.patch
+URL:		http://givaro.forge.imag.fr/
+Source0:	https://github.com/linbox-team/%{name}/releases/download/v%{version}/givaro-%{version}.tar.gz
 Patch1:		givaro-underlink.patch
 
 BuildRequires:	doxygen
@@ -51,8 +49,6 @@ This package contains the givaro development files.
 
 %prep
 %setup -q -n givaro-%{version}
-%patch0 -p0
-%patch1 -p1
 
 # Fix file encodings
 for i in Licence_CeCILL-B_V1-fr.txt Licence_CeCILL-B_V1-en.txt COPYING AUTHORS;
@@ -66,6 +62,8 @@ done
 find examples -name Makefile.am -perm /0111 | xargs chmod a-x
 
 %build
+export CC=gcc
+export CXX=g++
 %configure2_5x --enable-shared --disable-static --enable-doc \
   --docdir=%{_docdir}/%{name}-devel-%{version} CPPFLAGS="-D__int64=__int64_t"
 
@@ -103,7 +101,7 @@ LD_LIBRARY_PATH=$PWD/src/.libs: make check
 %files		-n %{libgivaro}
 %doc AUTHORS COPYRIGHT COPYING
 %doc Licence_CeCILL-B_V1-en.txt Licence_CeCILL-B_V1-fr.txt
-%{_libdir}/lib%{name}.so.*
+%{_libdir}/lib%{name}.so.%{major}*
 
 
 %files		-n %{libgivaro_devel}
@@ -111,6 +109,8 @@ LD_LIBRARY_PATH=$PWD/src/.libs: make check
 %{_bindir}/%{name}-config
 %{_includedir}/%{name}/
 %{_includedir}/gmp++/
+%{_includedir}/recint
 %{_datadir}/%{name}/
 %{_includedir}/%{name}-config.h
 %{_libdir}/lib%{name}.so
+%{_libdir}/pkgconfig/%{name}.pc
