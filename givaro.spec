@@ -1,6 +1,7 @@
 %define major	9
 %define libgivaro	%mklibname %{name} %{major}
 %define libgivaro_devel	%mklibname %{name} -d 
+%define _disable_lto 1
 
 Name:		givaro
 Version:	4.0.2
