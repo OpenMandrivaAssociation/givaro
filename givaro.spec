@@ -65,6 +65,11 @@ find examples -name Makefile.am -perm /0111 | xargs chmod a-x
 %build
 export CC=gcc
 export CXX=g++
+%ifarch %{ix86}
+# Excess precision leads to test failures
+export CFLAGS="%{optflags} -ffloat-store"
+export CXXFLAGS="%{optflags} -ffloat-store"
+%endif
 %configure2_5x --enable-shared --disable-static --enable-doc \
   --docdir=%{_docdir}/%{name}-devel-%{version} CPPFLAGS="-D__int64=__int64_t"
 
