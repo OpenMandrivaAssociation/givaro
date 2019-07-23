@@ -4,7 +4,7 @@
 %define _disable_lto 1
 
 Name:		givaro
-Version:	4.0.2
+Version:	4.1.1
 Release:	1
 Summary:	C++ library for arithmetic and algebraic computations
 License:	CeCILL-B
