@@ -1,0 +1,22 @@
+From a6b370873e406f9921a50359ed8ebf4714776411 Mon Sep 17 00:00:00 2001
+From: Jean-Guillaume Dumas <Jean-Guillaume.Dumas@imag.fr>
+Date: Wed, 11 Oct 2023 14:19:52 +0200
+Subject: [PATCH] cstdint required for uint64_t
+
+---
+ src/kernel/system/givpower.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/kernel/system/givpower.h b/src/kernel/system/givpower.h
+index 5644264d..080e114d 100644
+--- a/src/kernel/system/givpower.h
++++ b/src/kernel/system/givpower.h
+@@ -16,6 +16,8 @@
+ #ifndef __GIVARO_power_H
+ #define __GIVARO_power_H
+ 
++#include <cstdint>
++
+ namespace Givaro {
+ 
+     // -------------------------------------------------------------
