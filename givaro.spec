@@ -15,6 +15,7 @@ Patch1:		givaro-underlink.patch
 BuildRequires:	doxygen
 BuildRequires:	gmpxx-devel
 BuildRequires:	texlive
+BuildRequires:	locales-extra-charsets
 
 
 %description
