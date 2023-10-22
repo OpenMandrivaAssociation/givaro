@@ -10,7 +10,8 @@ Summary:	C++ library for arithmetic and algebraic computations
 License:	CeCILL-B
 URL:		http://givaro.forge.imag.fr/
 Source0:	https://github.com/linbox-team/%{name}/releases/download/v%{version}/givaro-%{version}.tar.gz
-Patch1:		givaro-underlink.patch
+#Patch1:		givaro-underlink.patch
+Patch2: https://github.com/linbox-team/givaro/commit/a6b370873e406f9921a50359ed8ebf4714776411.patch
 
 BuildRequires:	doxygen
 BuildRequires:	gmpxx-devel
@@ -50,7 +51,7 @@ This package contains the givaro development files.
 
 
 %prep
-%setup -q -n givaro-%{version}
+%autosetup -n givaro-%{version} -p1
 
 # Fix file encodings
 for i in Licence_CeCILL-B_V1-fr.txt Licence_CeCILL-B_V1-en.txt COPYING AUTHORS;
