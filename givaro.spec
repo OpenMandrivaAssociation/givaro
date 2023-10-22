@@ -61,7 +61,7 @@ do
 done
 
 # Remove unnecessary executable bits
-find examples -name Makefile.am -perm /0111 | xargs chmod a-x
+#find examples -name Makefile.am -perm /0111 | xargs chmod a-x
 
 %build
 export CC=gcc
