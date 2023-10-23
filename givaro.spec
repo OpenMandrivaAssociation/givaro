@@ -98,10 +98,10 @@ make install DESTDIR=$RPM_BUILD_ROOT
 rm -f $RPM_BUILD_ROOT%{_libdir}/lib%{name}.la
 
 #givaro-makefile is installed incorrectly in usr/bin
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}
-mv $RPM_BUILD_ROOT/%{_bindir}/givaro-makefile $RPM_BUILD_ROOT%{_datadir}/%{name}
-chmod 644  $RPM_BUILD_ROOT%{_datadir}/%{name}/givaro-makefile
-sed -i '\%#! /bin/sh%D' $RPM_BUILD_ROOT%{_datadir}/%{name}/givaro-makefile
+#mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}
+#mv $RPM_BUILD_ROOT/%{_bindir}/givaro-makefile $RPM_BUILD_ROOT%{_datadir}/%{name}
+#chmod 644  $RPM_BUILD_ROOT%{_datadir}/%{name}/givaro-makefile
+#sed -i '\%#! /bin/sh%D' $RPM_BUILD_ROOT%{_datadir}/%{name}/givaro-makefile
 
 
 %check
