@@ -15,7 +15,7 @@ Patch2: https://github.com/linbox-team/givaro/commit/a6b370873e406f9921a50359ed8
 Patch3:	https://github.com/linbox-team/givaro/commit/c7744bb133496cd7ac04688f345646d505e1bf52.patch
 
 BuildRequires:	doxygen
-BuildRequires:	gmpxx-devel
+BuildRequires:	pkgconfig(gmpxx)
 BuildRequires:	texlive
 BuildRequires:	locales-extra-charsets
 
@@ -44,7 +44,7 @@ Summary:	Givaro development files
 Provides:	%{name}-devel = %{version}-%{release}
 Provides:	lib-%{name}-devel = %{version}-%{release}
 Requires:	%{libgivaro} = %{version}-%{release}
-Requires:	gmpxx-devel
+Requires:	pkgconfig(gmpxx)
 
 
 %description	-n %{libgivaro_devel}
@@ -66,14 +66,14 @@ done
 #find examples -name Makefile.am -perm /0111 | xargs chmod a-x
 
 %build
-export CC=gcc
-export CXX=g++
+#export CC=gcc
+#export CXX=g++
 %ifarch %{ix86}
 # Excess precision leads to test failures
 export CFLAGS="%{optflags} -ffloat-store"
 export CXXFLAGS="%{optflags} -ffloat-store"
 %endif
-%configure2_5x --enable-shared --disable-static --enable-doc \
+%configure --enable-shared --disable-static --enable-doc \
   --docdir=%{_docdir}/%{name}-devel-%{version} CPPFLAGS="-D__int64=__int64_t"
 
 # Get rid of undesirable hardcoded rpaths, and workaround libtool reordering
@@ -84,7 +84,7 @@ sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
     -e 's|^CC="\(g..\)"|CC="\1 -Wl,--as-needed"|' \
     -i libtool
 
-make %{?_smp_mflags}
+%make_build
 
 # We don't want these files with the doxygen-generated files
 rm -f docs/givaro-html/{AUTHORS,COPYING,INSTALL}
