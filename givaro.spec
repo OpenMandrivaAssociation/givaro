@@ -4,17 +4,20 @@
 %define _disable_lto 1
 
 Name:		givaro
-Version:	4.1.1
+Version:	4.2.0
 Release:	1
 Summary:	C++ library for arithmetic and algebraic computations
 License:	CeCILL-B
 URL:		http://givaro.forge.imag.fr/
 Source0:	https://github.com/linbox-team/%{name}/releases/download/v%{version}/givaro-%{version}.tar.gz
-Patch1:		givaro-underlink.patch
+#Patch1:		givaro-underlink.patch
+Patch2: https://github.com/linbox-team/givaro/commit/a6b370873e406f9921a50359ed8ebf4714776411.patch
+Patch3:	https://github.com/linbox-team/givaro/commit/c7744bb133496cd7ac04688f345646d505e1bf52.patch
 
 BuildRequires:	doxygen
-BuildRequires:	gmpxx-devel
+BuildRequires:	pkgconfig(gmpxx)
 BuildRequires:	texlive
+BuildRequires:	locales-extra-charsets
 
 
 %description
@@ -41,7 +44,7 @@ Summary:	Givaro development files
 Provides:	%{name}-devel = %{version}-%{release}
 Provides:	lib-%{name}-devel = %{version}-%{release}
 Requires:	%{libgivaro} = %{version}-%{release}
-Requires:	gmpxx-devel
+Requires:	pkgconfig(gmpxx)
 
 
 %description	-n %{libgivaro_devel}
@@ -49,7 +52,7 @@ This package contains the givaro development files.
 
 
 %prep
-%setup -q -n givaro-%{version}
+%autosetup -n givaro-%{version} -p1
 
 # Fix file encodings
 for i in Licence_CeCILL-B_V1-fr.txt Licence_CeCILL-B_V1-en.txt COPYING AUTHORS;
@@ -60,17 +63,17 @@ do
 done
 
 # Remove unnecessary executable bits
-find examples -name Makefile.am -perm /0111 | xargs chmod a-x
+#find examples -name Makefile.am -perm /0111 | xargs chmod a-x
 
 %build
-export CC=gcc
-export CXX=g++
+#export CC=gcc
+#export CXX=g++
 %ifarch %{ix86}
 # Excess precision leads to test failures
 export CFLAGS="%{optflags} -ffloat-store"
 export CXXFLAGS="%{optflags} -ffloat-store"
 %endif
-%configure2_5x --enable-shared --disable-static --enable-doc \
+%configure --enable-shared --disable-static --enable-doc \
   --docdir=%{_docdir}/%{name}-devel-%{version} CPPFLAGS="-D__int64=__int64_t"
 
 # Get rid of undesirable hardcoded rpaths, and workaround libtool reordering
@@ -81,7 +84,7 @@ sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
     -e 's|^CC="\(g..\)"|CC="\1 -Wl,--as-needed"|' \
     -i libtool
 
-make %{?_smp_mflags}
+%make_build
 
 # We don't want these files with the doxygen-generated files
 rm -f docs/givaro-html/{AUTHORS,COPYING,INSTALL}
@@ -95,10 +98,10 @@ make install DESTDIR=$RPM_BUILD_ROOT
 rm -f $RPM_BUILD_ROOT%{_libdir}/lib%{name}.la
 
 #givaro-makefile is installed incorrectly in usr/bin
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}
-mv $RPM_BUILD_ROOT/%{_bindir}/givaro-makefile $RPM_BUILD_ROOT%{_datadir}/%{name}
-chmod 644  $RPM_BUILD_ROOT%{_datadir}/%{name}/givaro-makefile
-sed -i '\%#! /bin/sh%D' $RPM_BUILD_ROOT%{_datadir}/%{name}/givaro-makefile
+#mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}
+#mv $RPM_BUILD_ROOT/%{_bindir}/givaro-makefile $RPM_BUILD_ROOT%{_datadir}/%{name}
+#chmod 644  $RPM_BUILD_ROOT%{_datadir}/%{name}/givaro-makefile
+#sed -i '\%#! /bin/sh%D' $RPM_BUILD_ROOT%{_datadir}/%{name}/givaro-makefile
 
 
 %check
