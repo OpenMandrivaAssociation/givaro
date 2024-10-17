@@ -8,7 +8,7 @@ Version:	4.2.0
 Release:	1
 Summary:	C++ library for arithmetic and algebraic computations
 License:	CeCILL-B
-URL:		http://givaro.forge.imag.fr/
+URL:		https://givaro.forge.imag.fr/
 Source0:	https://github.com/linbox-team/%{name}/releases/download/v%{version}/givaro-%{version}.tar.gz
 #Patch1:		givaro-underlink.patch
 Patch2: https://github.com/linbox-team/givaro/commit/a6b370873e406f9921a50359ed8ebf4714776411.patch
