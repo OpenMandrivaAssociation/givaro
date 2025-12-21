@@ -14,6 +14,11 @@ Source0:	https://github.com/linbox-team/%{name}/releases/download/v%{version}/gi
 Patch2: https://github.com/linbox-team/givaro/commit/a6b370873e406f9921a50359ed8ebf4714776411.patch
 Patch3:	https://github.com/linbox-team/givaro/commit/c7744bb133496cd7ac04688f345646d505e1bf52.patch
 
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	doxygen
 BuildRequires:	pkgconfig(gmpxx)
 BuildRequires:	texlive
